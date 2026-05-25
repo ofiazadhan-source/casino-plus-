@@ -100,12 +100,12 @@ import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDyqJOypfva6fwZ6hEV07C8xegQbA-ai-0",
-  authDomain: "casino-web-dan.firebaseapp.com",
-  projectId: "casino-web-dan",
-  storageBucket: "casino-web-dan.firebasestorage.app",
-  messagingSenderId: "347087435531",
-  appId: "1:347087435531:web:02ce3b86d7d643e160940e"
+  apiKey: "AIzaSyDk32bOUxw3EfJzdtAJ2ueJq5ykSfkEK",
+  authDomain: "dhan-siomai-pos-fele5.firebaseapp.com",
+  projectId: "dhan-siomai-pos-fele5",
+  storageBucket: "dhan-siomai-pos-fele5.firebasestorage.app",
+  messagingSenderId: "305932123173",
+  appId: "1:305932123173:web:f27894a2d5e6e6ab8253cc"
 };
 
 // Initialize Firebase
@@ -183,29 +183,21 @@ window.placeBet = async function() {
   betBtn.disabled = true;
   resultEl.innerHTML = '<span class="loading">Spinning...</span>';
   
-  // Simulate game logic - 50% chance to win 2x
   const won = Math.random() < 0.5;
   const winAmount = won ? betAmount * 2 : 0;
   const netChange = winAmount - betAmount;
   credits += netChange;
   
-  // Update Firestore
   const playerRef = doc(db, 'players', userId);
   await updateDoc(playerRef, { credits: credits });
   
-  // Add to history
   const historyRef = collection(db, 'players', userId, 'history');
   await addDoc(historyRef, {
     bet: netChange,
     timestamp: Date.now()
   });
   
-  // Show result
-  if (won) {
-    resultEl.innerHTML = `You won ${winAmount} credits! 🎉`;
-  } else {
-    resultEl.innerHTML = `You lost ${betAmount} credits 😢`;
-  }
+  resultEl.innerHTML = won ? `You won ${winAmount} credits! 🎉` : `You lost ${betAmount} credits 😢`;
   
   updateCreditsDisplay();
   await loadHistory();
